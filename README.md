@@ -1,10 +1,13 @@
 # TradeShift Atlas
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://ghgr.github.io/TradeShift-Atlas)
+
 Interactive world choropleth for exploring changes in normalized bilateral trade coupling between two periods (e.g., 2015 → 2024). Hover a country to select it as the **source**; the map colors every **target** by the signed change in that target’s share of the source country’s total bilateral trade weight.
 
 - **Green**: target became a larger share of the source’s external trade coupling
 - **Red**: target became a smaller share
 - **White**: little / no change
+
 
 ## Data model
 
