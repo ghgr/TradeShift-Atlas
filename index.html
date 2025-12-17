@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+<div id="map" style="width:100vw;height:100vh;"></div>
+
+<script>
+fetch("data/data.json").then(r => r.json()).then(data => {
+
+  const countries = data.countries;
+  const matrix = data.matrix;
+  let active = countries[0];
+
+  function makeZ(source) {
+    return countries.map(c => {
+      let v = matrix[c][source];
+      return Math.max(-1, Math.min(1, v));
+    });
+  }
+
+  let trace = {
+    type: "choropleth",
+    locationmode: "ISO-3",
+    locations: countries,
+    z: makeZ(active),
+    zmin: -1,
+    zmax: 1,
+    zmid: 0,
+    colorscale: [
+      [0.0, "#a50026"],
+      [0.5, "#ffffff"],
+      [1.0, "#006837"]
+    ],
+    hovertemplate:
+      "Target: %{location}<br>" +
+      "Source: " + active + "<br>" +
+      "Value: %{z:.4e}<extra></extra>"
+  };
+
+  let layout = {
+    geo: {
+      projection: { type: "natural earth" },
+      showcoastlines: false,
+      showframe: false,
+	  dragmode: false
+    },
+    annotations: [{
+      text:
+        "Trade change between 2015 → 2024<br>" +
+        "<span style='color:#006837'>Green</span>: increase &nbsp; " +
+        "<span style='color:#a50026'>Red</span>: decrease<br>" +
+        "Hover over a country to see bilateral evolution",
+      x: 0.01,
+      y: 0.01,
+      xref: "paper",
+      yref: "paper",
+      xanchor: "left",
+      yanchor: "bottom",
+      align: "left",
+      showarrow: false,
+      font: {
+        size: 12,
+        color: "#000"
+      },
+      bgcolor: "rgba(255,255,255,0.85)",
+      bordercolor: "#ccc",
+      borderwidth: 1,
+      borderpad: 6
+    }],
+    margin: { l: 0, r: 0, t: 0, b: 0 }
+  };
+
+
+	Plotly.newPlot(
+	  "map",
+	  [trace],
+	  layout,
+	  {
+		displayModeBar: false,
+		scrollZoom: false,
+		doubleClick: false
+	  }
+	);
+
+
+  let map = document.getElementById("map");
+
+  map.on("plotly_hover", ev => {
+    active = ev.points[0].location;
+    Plotly.restyle("map", {
+      z: [makeZ(active)],
+      hovertemplate: [
+        "Target: %{location}<br>" +
+        "Source: " + active + "<br>" +
+        "Value: %{z:.4e}<extra></extra>"
+      ]
+    });
+  });
+
+});
+</script>
+</body>
+</html>
+
