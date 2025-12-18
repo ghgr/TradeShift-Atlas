@@ -35,42 +35,29 @@ fetch("data/data.json").then(r => r.json()).then(data => {
       [1.0, "#006837"]
     ],
     hovertemplate:
-      "Target: %{location}<br>" +
-      "Source: " + active + "<br>" +
-      "Value: %{z:.4e}<extra></extra>"
+      "%{location}" 
   };
 
   let layout = {
+    title: {
+      text:
+        "Relative change in international relations between 2015 → 2024<br>" +
+        "<span style='color:#006837'>Green</span>: increase &nbsp; " +
+        "<span style='color:#a50026'>Red</span>: decrease<br>" +
+        "Hover over a country to see bilateral evolution",
+      x: 0.5,
+      xanchor: "center",
+      y: 0.98,
+      yanchor: "top",
+      font: { size: 12 }
+    },
+	margin: { t: 90 },
     geo: {
       projection: { type: "natural earth" },
       showcoastlines: false,
       showframe: false,
 	  dragmode: false
-    },
-    annotations: [{
-      text:
-        "Trade change between 2015 → 2024<br>" +
-        "<span style='color:#006837'>Green</span>: increase &nbsp; " +
-        "<span style='color:#a50026'>Red</span>: decrease<br>" +
-        "Hover over a country to see bilateral evolution",
-      x: 0.01,
-      y: 0.01,
-      xref: "paper",
-      yref: "paper",
-      xanchor: "left",
-      yanchor: "bottom",
-      align: "left",
-      showarrow: false,
-      font: {
-        size: 12,
-        color: "#000"
-      },
-      bgcolor: "rgba(255,255,255,0.85)",
-      bordercolor: "#ccc",
-      borderwidth: 1,
-      borderpad: 6
-    }],
-    margin: { l: 0, r: 0, t: 0, b: 0 }
+    }
   };
 
 
@@ -92,11 +79,7 @@ fetch("data/data.json").then(r => r.json()).then(data => {
     active = ev.points[0].location;
     Plotly.restyle("map", {
       z: [makeZ(active)],
-      hovertemplate: [
-        "Target: %{location}<br>" +
-        "Source: " + active + "<br>" +
-        "Value: %{z:.4e}<extra></extra>"
-      ]
+      hovertemplate: ["%{location}<extra></extra>"]
     });
   });
 
